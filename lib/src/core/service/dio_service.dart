@@ -9,6 +9,11 @@ abstract class IHttpClient{
   required String login,
   required String password,
   });
+
+  Future get({
+    required url,
+    required token
+  });
 }
 
 
@@ -43,6 +48,25 @@ class DioService implements IHttpClient{
         }
       )
     );
+  }
+
+  @override
+  Future get({
+    required url,
+    required token
+  }) async{
+      final client = Dio();
+
+      return await client.request(
+          url,
+          options: Options(
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer $token"
+            }
+          )
+      );
   }
   
 }

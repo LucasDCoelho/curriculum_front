@@ -26,7 +26,8 @@ class LoginScreen extends StatelessWidget {
                  obscureText: false,
                  hintText: "Login",
                  labelText: "Digite seu login",
-                 onChanged: authController.formController.setLogin
+                 onChanged: authController.formController.setLogin,
+                 errorText: authController.validateLogin()
              ),
             const SizedBox(
               height: 20,
@@ -35,7 +36,8 @@ class LoginScreen extends StatelessWidget {
                 obscureText: true,
                 hintText: "Senha",
                 labelText: "Digite sua senha",
-                onChanged: authController.formController.setPassword
+                onChanged: authController.formController.setPassword,
+                errorText: authController.validatePassword()
             ),
             ObserverButton(onPressed: () async {
               await authController.login();

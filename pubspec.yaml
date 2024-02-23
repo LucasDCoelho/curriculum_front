@@ -39,6 +39,8 @@ dependencies:
   mobx: ^2.3.0+1
   flutter_mobx: ^2.2.0+2
   dio: ^5.4.0
+  shared_preferences: ^2.2.2
+  jwt_decoder: ^2.0.1
 
 
 dev_dependencies:
