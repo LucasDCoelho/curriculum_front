@@ -41,7 +41,15 @@ class LoginScreen extends StatelessWidget {
             ),
             ObserverButton(onPressed: () async {
               await authController.login();
-            }, child: const Text("Entrar"))
+            }, child: const Text("Entrar")),
+            const SizedBox(
+              height: 80,
+            ),
+
+            /// Implementação Futura:
+            // ObserverButton(onPressed: () async {
+            //   Modular.to.pushNamed("/register/");
+            // }, child: const Text("Cadastrar-se"))
           ],
         ),
       ),

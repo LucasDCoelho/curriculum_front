@@ -13,13 +13,13 @@ mixin _$AdminContentController on _AdminContentController, Store {
       Atom(name: '_AdminContentController.candidatos', context: context);
 
   @override
-  ObservableList<Candidato> get candidatos {
+  ObservableList<ListAllCandidatoDTO> get candidatos {
     _$candidatosAtom.reportRead();
     return super.candidatos;
   }
 
   @override
-  set candidatos(ObservableList<Candidato> value) {
+  set candidatos(ObservableList<ListAllCandidatoDTO> value) {
     _$candidatosAtom.reportWrite(value, super.candidatos, () {
       super.candidatos = value;
     });

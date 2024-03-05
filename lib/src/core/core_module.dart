@@ -8,6 +8,7 @@ class CoreModule extends Module{
   void exportedBinds(Injector i){
     i.add(DioService.new);
   }
+  
 
   @override
   void routes(RouteManager r) {

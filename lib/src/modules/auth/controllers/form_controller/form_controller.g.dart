@@ -9,6 +9,21 @@ part of 'form_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$FormController on _FormController, Store {
+  Computed<String>? _$getLoginComputed;
+
+  @override
+  String get getLogin =>
+      (_$getLoginComputed ??= Computed<String>(() => super.getLogin,
+              name: '_FormController.getLogin'))
+          .value;
+  Computed<String>? _$getPasswordComputed;
+
+  @override
+  String get getPassword =>
+      (_$getPasswordComputed ??= Computed<String>(() => super.getPassword,
+              name: '_FormController.getPassword'))
+          .value;
+
   late final _$loginAtom =
       Atom(name: '_FormController.login', context: context);
 
@@ -70,7 +85,9 @@ mixin _$FormController on _FormController, Store {
   String toString() {
     return '''
 login: ${login},
-password: ${password}
+password: ${password},
+getLogin: ${getLogin},
+getPassword: ${getPassword}
     ''';
   }
 }

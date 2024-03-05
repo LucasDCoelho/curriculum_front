@@ -13,7 +13,7 @@ part 'auth_controller.g.dart';
 class AuthController = _AuthController with _$AuthController;
 
 abstract class _AuthController with Store{
-  final _baseUrl = "http://192.168.100.10:8080";
+  final _baseUrl = "http://192.168.100.21:8080";
   final _dioService = Modular.get<DioService>();
   final formController = Modular.get<FormController>();
 
@@ -24,12 +24,14 @@ abstract class _AuthController with Store{
   String token = "";
 
 
+
   // Validations Form
   String? validateLogin(){
-    if(formController.login.isEmpty){
+    if(formController.getLogin.isEmpty){
       return "Este campo é obrigatório";
     }
-    if(formController.login.length < 3){
+    if(formController.getLogin.length < 3){
+
       return "Seu login precisa ter mais de 3 caracteres";
     }
 
@@ -37,10 +39,10 @@ abstract class _AuthController with Store{
   }
 
   String? validatePassword(){
-    if(formController.password.isEmpty){
+    if(formController.getPassword.isEmpty){
       return "Este campo é obrigatório";
     }
-    if(formController.password.length < 8){
+    if(formController.getPassword.length < 8){
       return "Sua senha precisa ter mais de 8 caracteres";
     }
 
@@ -58,19 +60,28 @@ abstract class _AuthController with Store{
   Future login() async{
     try{
       if(isValid){
-        final response = await _dioService.post(
+        final response = await _dioService.postLogin(
             url:"$_baseUrl/auth/login",
             login: formController.login,
             password: formController.password
         );
         token = response.data["token"];
+        if (kDebugMode) {
+          print(token);
+        }
 
         await tokenController.saveToken(token);
-        Modular.to.pushNamed("/home/");
+        Modular.to.navigate("/home/");
+
+        if (kDebugMode) {
+          print("Login realizado com sucesso!");
+        }
+      } else{
+        if (kDebugMode) {
+          print("Login não validado!");
+        }
       }
-      if (kDebugMode) {
-        print("Login bem sucedido!");
-      }
+      
     } catch(e){
       if (kDebugMode) {
         print("Erro durante o login $e");
@@ -80,7 +91,7 @@ abstract class _AuthController with Store{
 
   Future logout() async{
     await tokenController.clearToken();
-    Modular.to.pop();
+    Modular.to.navigate("/login/");
     token = "";
   }
 

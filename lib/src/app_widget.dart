@@ -6,6 +6,7 @@ class AppWidget extends StatelessWidget {
     return MaterialApp.router(
       title: "Curriculum",
       theme: ThemeData(primarySwatch: Colors.indigo),
+      debugShowCheckedModeBanner: false,
       routerConfig: Modular.routerConfig,
     );
   }

@@ -50,13 +50,27 @@ abstract class _TokenController with Store{
   }
 
   Future<String> decodedToken() async{
-    final SharedPreferences prefs = await _prefs;
-    final savedToken = prefs.getString(_tokenKey);
-    if(savedToken != null){
-      Map<String, dynamic> decodedToken = JwtDecoder.decode(savedToken!);
+    final token = await getToken();
+    if(token != null){
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
       String userRole = decodedToken['role'];
       return userRole;
     }
     return "";
+  }
+
+  Future<bool> isTokenValid() async{
+    final token = await getToken();
+    if(token != null){
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      int userExpiration = decodedToken['exp'] as int;
+      if(userExpiration == 0){
+        return false;
+      }
+
+      final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      return now < userExpiration;
+    }
+    return false;
   }
 }

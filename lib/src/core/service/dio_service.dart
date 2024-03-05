@@ -4,10 +4,17 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 abstract class IHttpClient{
-  Future post({
+  Future postLogin({
   required String url,
   required String login,
   required String password,
+  });
+
+
+  Future postCandidato({
+  required String url,
+  required Map<String, dynamic>? headers,
+  required Object? data,
   });
 
   Future get({
@@ -18,14 +25,23 @@ abstract class IHttpClient{
 
 
 class DioService implements IHttpClient{
+  late Dio _dio;
+
+  DioService(){
+    _dio = Dio();
+  }
+
+  String getBaseUrl(){
+    return "https://api-curriculum.onrender.com";
+  }
 
   @override
-  Future post({
+  Future postLogin({
     required String url,
     required String login,
     required String password,
   }) async {
-    final client = Dio();
+
     if (kDebugMode) {
       print(login);
     }
@@ -38,7 +54,7 @@ class DioService implements IHttpClient{
       "password": password
     });
 
-    return await client.request(
+    return await _dio.request(
       url,
       data: data,
       options: Options(
@@ -55,9 +71,9 @@ class DioService implements IHttpClient{
     required url,
     required token
   }) async{
-      final client = Dio();
 
-      return await client.request(
+
+      return await _dio.request(
           url,
           options: Options(
             method: "GET",
@@ -67,6 +83,18 @@ class DioService implements IHttpClient{
             }
           )
       );
+  }
+  
+  @override
+  Future postCandidato({required String url, required Map<String, dynamic>? headers, required Object? data}) async{
+    return await _dio.request(
+      url,
+      data: data,
+      options: Options(
+        method: "POST",
+        headers: headers
+      )
+    );
   }
   
 }
