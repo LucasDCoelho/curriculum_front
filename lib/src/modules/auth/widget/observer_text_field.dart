@@ -7,12 +7,14 @@ class ObserverTextField extends StatefulWidget {
   final void Function(String)? onChanged;
   final bool obscureText;
   final String? errorText;
+  final bool enabled;
 
   const ObserverTextField({
     required this.labelText,
     required this.hintText,
     required this.onChanged,
     required this.obscureText,
+    this.enabled = true,
     this.errorText,
     super.key
       });
@@ -29,6 +31,7 @@ class _ObserverTextFieldState extends State<ObserverTextField> {
           onChanged: widget.onChanged,
           obscureText: widget.obscureText,
           decoration: InputDecoration(
+            enabled: widget.enabled,
             border: const OutlineInputBorder(),
             labelText: widget.labelText,
             hintText: widget.hintText,

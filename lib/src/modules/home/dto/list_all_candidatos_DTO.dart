@@ -1,5 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-
+import 'package:curriculum_front/src/modules/home/enums/situacao.dart';
 
 class ListAllCandidatoDTO {
   final int id;
@@ -7,7 +6,8 @@ class ListAllCandidatoDTO {
   final String cpf;
   final String email;
   final String telefone;
-  final String situacao;
+  final Situacao situacao;
+
   ListAllCandidatoDTO({
     required this.id,
     required this.nome,
@@ -16,4 +16,16 @@ class ListAllCandidatoDTO {
     required this.telefone,
     required this.situacao,
   });
+
+  factory ListAllCandidatoDTO.fromJson(Map<String, dynamic> json) {
+
+    return ListAllCandidatoDTO(
+      id: json['id'] as int,
+      nome: json['nome'] as String,
+      cpf: json['cpf'] as String,
+      email: json['email'] as String,
+      telefone: json['telefone'] as String,
+      situacao: SituacaoExtension.fromMap(json['situacao']),
+    );
+  }
 }

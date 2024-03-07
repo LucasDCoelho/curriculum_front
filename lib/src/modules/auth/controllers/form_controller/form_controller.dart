@@ -14,7 +14,7 @@ abstract class _FormController with Store {
   String password = "";
   @action
   setPassword(String value) => password = value;
-  
+
   @computed
   String get getLogin => login;
 

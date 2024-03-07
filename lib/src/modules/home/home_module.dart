@@ -1,26 +1,31 @@
 import 'package:curriculum_front/src/modules/auth/auth_module.dart';
+import 'package:curriculum_front/src/modules/home/controllers/admin_content_controller.dart';
 import 'package:curriculum_front/src/modules/home/controllers/candidato_form_controller/candidato_form_controller.dart';
-import 'package:curriculum_front/src/modules/home/dto/register_candidato_DTO.dart';
+import 'package:curriculum_front/src/modules/home/screens/details/details_candidato_screen.dart';
 import 'package:curriculum_front/src/modules/home/screens/home_screen.dart';
+import 'package:curriculum_front/src/modules/home/screens/situacao_inscricao_screen.dart';
+import 'package:curriculum_front/src/modules/home/widgets/user_content.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class HomeModule extends Module{
 
   @override
   void exportedBinds(Injector i) {
-    // TODO: implement exportedBinds
     i.add(CandidatoFormController.new);
+    i.add(AdminContentController.new);
   }
 
   @override
-  // TODO: implement imports
   List<Module> get imports => [
-    AuthModule()
+    AuthModule(),
   ];
 
 
   @override
   void routes(RouteManager r) {
-    r.child("/", child: (_) => const HomeScreen());
+    r.child("/", child: (context) => const HomeScreen());
+    r.child("/details", child: (context) => const DetailsScreen());
+    r.child("/situacao", child: (context) => const SituacaoInscricao());
+    r.child("/register", child: (context) => const UserContent());
   }
 }

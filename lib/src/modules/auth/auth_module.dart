@@ -1,11 +1,9 @@
 
 import 'package:curriculum_front/src/core/core_module.dart';
 import 'package:curriculum_front/src/modules/auth/controllers/auth_controller/auth_controller.dart';
-import 'package:curriculum_front/src/modules/home/controllers/candidato_form_controller/candidato_form_controller.dart';
 import 'package:curriculum_front/src/modules/auth/controllers/form_controller/form_controller.dart';
 import 'package:curriculum_front/src/modules/auth/controllers/token_controller/token_controller.dart';
 import 'package:curriculum_front/src/modules/auth/screens/login_screen.dart';
-import 'package:curriculum_front/src/modules/home/home_module.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class AuthModule extends Module{
@@ -18,7 +16,6 @@ class AuthModule extends Module{
   }
 
   @override
-  // TODO: implement imports
   List<Module> get imports => [
     CoreModule(),
   ];

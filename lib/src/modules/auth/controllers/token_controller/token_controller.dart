@@ -13,6 +13,9 @@ abstract class _TokenController with Store{
   @observable
   late String token = "";
 
+  @observable
+  late int tokenId = 0;
+
   @action
   Future saveToken(String value) async{
     final SharedPreferences prefs = await _prefs;
@@ -72,5 +75,16 @@ abstract class _TokenController with Store{
       return now < userExpiration;
     }
     return false;
+  }
+
+  @computed
+  int get getTokenId => tokenId;
+
+  @action
+  Future decodedTokenId() async{
+      final token = await getToken();
+
+      final decodedToken = JwtDecoder.decode(token!);
+      tokenId = decodedToken["id"];
   }
 }

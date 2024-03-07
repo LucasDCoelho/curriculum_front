@@ -86,7 +86,7 @@ class DioService implements IHttpClient{
   }
   
   @override
-  Future postCandidato({required String url, required Map<String, dynamic>? headers, required Object? data}) async{
+  Future postCandidato({required String url, required Map<String, dynamic>? headers, Object? data}) async{
     return await _dio.request(
       url,
       data: data,

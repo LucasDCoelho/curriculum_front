@@ -3,12 +3,14 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 
 class ObserverButton extends StatefulWidget {
   final Future Function()? onPressed;
+  final ButtonStyle? style;
   final Widget? child;
 
   const ObserverButton({
     required this.onPressed,
     required this.child,
-    super.key
+    this.style,
+    super.key, 
   });
 
   @override
@@ -21,6 +23,7 @@ class _ObserverButtonState extends State<ObserverButton> {
     return Observer(
       builder: (_) => ElevatedButton(
           onPressed: widget.onPressed,
+          style: widget.style,
           child: widget.child
       ),
     );

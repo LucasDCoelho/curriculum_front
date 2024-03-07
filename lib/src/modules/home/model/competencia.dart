@@ -1,27 +1,24 @@
-import 'dart:convert';
-
 import 'package:curriculum_front/src/modules/home/enums/proficiencia.dart';
 
 class Competencia {
-  late String descricao;
-  late Proficiencia proficiencia;
+  int? id;
+  String descricao;
+  Proficiencia proficiencia;
 
-  Competencia({required this.descricao, required this.proficiencia});
+  Competencia({ required this.descricao, required this.proficiencia, this.id});
+
+  factory Competencia.fromJson(Map<String, dynamic> json) {
+    return Competencia(
+      id: json['id'],
+      descricao: json['descricao'] as String,
+      proficiencia: ProficienciaExtension.fromValue(json['proficiencia'] as String),
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
       'descricao': descricao,
       'proficiencia': proficiencia.toValue(),
     };
-  }
-
-  factory Competencia.fromJson(String source) =>
-      Competencia.fromMap(json.decode(source));
-
-  factory Competencia.fromMap(Map<String, dynamic> map) {
-    return Competencia(
-      descricao: map['descricao'],
-      proficiencia: ProficienciaExtension.fromString(map['proficiencia']),
-    );
   }
 }

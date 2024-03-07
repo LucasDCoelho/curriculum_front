@@ -16,7 +16,7 @@ extension ProficienciaExtension on Proficiencia {
     }
   }
 
-  static Proficiencia fromString(String value) {
+  static Proficiencia fromValue(String value) {
     switch (value) {
       case 'BASICO':
         return Proficiencia.basico;

@@ -2,11 +2,11 @@ import 'package:curriculum_front/src/core/service/dio_service.dart';
 import 'package:curriculum_front/src/modules/auth/controllers/token_controller/token_controller.dart';
 import 'package:curriculum_front/src/modules/home/enums/escolaridade.dart';
 import 'package:curriculum_front/src/modules/home/enums/proficiencia.dart';
-import 'package:curriculum_front/src/modules/home/dto/register_candidato_DTO.dart';
+import 'package:curriculum_front/src/modules/home/dto/register_candidato_dto.dart';
 import 'package:curriculum_front/src/modules/home/model/competencia.dart';
+import 'package:curriculum_front/src/modules/home/widgets/add_competencia.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 
 part 'candidato_form_controller.g.dart';
@@ -85,58 +85,15 @@ abstract class _CandidatoFormController with Store {
 
   @action
   Future adicionarCompetencia(BuildContext context) async {
-    final descricaoController = TextEditingController();
-    print("Teste0");
-    final descricao = await showDialog<String>(
+    await showDialog<String>(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Adicionar Competência'),
-        content: SingleChildScrollView(
-            child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextField(
-                controller: descricaoController,
-                decoration: const InputDecoration(labelText: 'Descrição'),
-              ),
-              DropdownButtonFormField<Proficiencia>(
-                value: proficiencia,
-                onChanged: setProficiencia,
-                items: Proficiencia.values.map((proficiencia) {
-                  return DropdownMenuItem<Proficiencia>(
-                    value: proficiencia,
-                    child: Text(proficiencia.toString().split('.').last),
-                  );
-                }).toList(),
-                decoration: const InputDecoration(labelText: 'Proficiencia'),
-              ),
-            ],
-          ),
-        )),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancelar'),
-          ),
-          TextButton(
-            onPressed: () {
-              final descricao = descricaoController.text;
-              if (descricao.isNotEmpty) {
-                addCompetencia(
-                  Competencia(descricao: descricao, proficiencia: proficiencia),
-                );
-              }
-              Navigator.of(context).pop();
-            },
-            child: const Text('Adicionar'),
-          ),
-        ],
+      builder: (_) => AdicionarCompetenciaDialog(
+        addCompetencia: (Competencia novaCompetencia) {
+          addCompetencia(novaCompetencia);
+        },
       ),
     );
   }
-
 
   // Data de nascimento state:
 
@@ -164,8 +121,10 @@ abstract class _CandidatoFormController with Store {
   }
 
   //  Enviar fomulario do candidato:
-  
+
   Future enviarCandidato() async {
+    
+
     print("Teste");
     final candidato = RegisterCandidatoDTO(
       nome: nome,
@@ -178,12 +137,13 @@ abstract class _CandidatoFormController with Store {
       competencias: competencias.toList(),
     );
 
-    const urlBase = 'http://192.168.100.21:8080/candidato/create';
+    const urlBase = 'https://api-curriculum.onrender.com/candidato/create';
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${await token.getToken()}'
     };
     final body = candidato.toJson();
+    print(body);
 
     try {
       final response = await _dioService.postCandidato(
@@ -195,6 +155,7 @@ abstract class _CandidatoFormController with Store {
       if (response.statusCode == 201) {
         // Sucesso ao enviar o candidato
         print('Candidato enviado com sucesso!');
+        Modular.to.pop();
       } else {
         // Falha ao enviar o candidato
         print('Falha ao enviar o candidato: ${response.statusCode}');

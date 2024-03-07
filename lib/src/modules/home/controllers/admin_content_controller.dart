@@ -1,7 +1,6 @@
 import 'package:curriculum_front/src/modules/auth/controllers/token_controller/token_controller.dart';
-import 'package:curriculum_front/src/modules/home/dto/list_all_candidatos_DTO.dart';
-import 'package:curriculum_front/src/modules/home/enums/situacao.dart';
-import 'package:dio/dio.dart';
+import 'package:curriculum_front/src/modules/home/dto/details_candidato_dto.dart';
+import 'package:curriculum_front/src/modules/home/dto/list_all_candidatos_dto.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
@@ -13,13 +12,16 @@ class AdminContentController = _AdminContentController
     with _$AdminContentController;
 
 abstract class _AdminContentController with Store {
-  final _baseUrl = "http://192.168.100.21:8080";
+  final _baseUrl = "https://api-curriculum.onrender.com";
   final _dioService = Modular.get<DioService>();
   final _token = Modular.get<TokenController>();
 
   @observable
   ObservableList<ListAllCandidatoDTO> candidatos =
       ObservableList<ListAllCandidatoDTO>();
+
+  @observable
+  DetailsCandidatoDTO? candidato;
 
   Future listarCandidatos() async {
     try {
@@ -33,14 +35,7 @@ abstract class _AdminContentController with Store {
         candidatos.clear();
 
         for (var candidatoData in response.data['content']) {
-          candidatos.add(ListAllCandidatoDTO(
-            id: candidatoData['id'],
-            nome: candidatoData['nome'],
-            cpf: candidatoData['cpf'],
-            email: candidatoData['email'],
-            telefone: candidatoData['telefone'],
-            situacao: candidatoData['situacao'],
-          ));
+          candidatos.add(ListAllCandidatoDTO.fromJson(candidatoData));
         }
       } else {
         print('Falha ao carregar candidatos: ${response.statusCode}');
@@ -50,39 +45,64 @@ abstract class _AdminContentController with Store {
     }
   }
 
+  @computed
+  Iterable<ListAllCandidatoDTO> get listaFiltrado => 
+        candidatos.where((e){ 
+          print(_token.getTokenId);
+          print(e.id);
+          return e.id == _token.getTokenId;
+          });
 
-  Future aprovarCandidato(int id) async{
+  Future aprovarCandidato(int? id) async {
     final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${await _token.getToken()}'
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await _token.getToken()}'
     };
     try {
-    final response = await _dioService.postCandidato(
-      url:" $_baseUrl/candidato/${id.toString()}/approve", 
-      headers: headers, data: {},
-    );
-    print(response.data); 
-    await listarCandidatos();
-  } catch (e) {
-    print('Erro ao aprovar candidato: $e');
-  }
+      final response = await _dioService.postCandidato(
+          url: "$_baseUrl/candidato/$id/approve", headers: headers);
+      print(response.data);
+      await listarCandidatos();
+    } catch (e) {
+      print('Erro ao aprovar candidato: $e');
+    }
   }
 
-
-   Future reprovarCandidato(int id) async{
+  Future reprovarCandidato(int? id) async {
     final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${await _token.getToken()}'
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await _token.getToken()}'
     };
     try {
-    final response = await _dioService.postCandidato(
-      url:" $_baseUrl/candidato/${id.toString()}/reject", 
-      headers: headers, data: {},
-    );
-    print(response.data); 
-    await listarCandidatos();
-  } catch (e) {
-    print('Erro ao aprovar candidato: $e');
+      final response = await _dioService.postCandidato(
+        url: "$_baseUrl/candidato/$id/reject",
+        headers: headers,
+        data: {'situacao': 'REPROVADO'},
+      );
+      print(response.data);
+      await listarCandidatos();
+    } catch (e) {
+      print('Erro ao aprovar candidato: $e');
+    }
   }
+
+  Future detalharCandidato(int? id) async {
+    try {
+      final response = await _dioService.get(
+          url: '$_baseUrl/candidato/$id', token: await _token.getToken());
+
+      if (response.statusCode == 200) {
+        final responseData =
+            DetailsCandidatoDTO.fromJson(response.data);
+        Modular.to.pushNamed("./details", arguments: responseData);
+      } else {
+        print(
+            'Erro ao buscar detalhes do candidato codigo: ${response.statusCode}');
+        return null; 
+      }
+    } catch (e) {
+      print('Erro ao buscar detalhes do candidato: $e');
+      return null; 
+    }
   }
 }
