@@ -1,11 +1,5 @@
 import 'dart:convert';
 import 'package:curriculum_front/src/modules/home/enums/escolaridade.dart';
-import 'package:curriculum_front/src/modules/home/model/candidato.dart';
-import 'package:curriculum_front/src/modules/home/model/competencia.dart';
-
-import 'dart:convert';
-
-import 'package:curriculum_front/src/modules/home/enums/escolaridade.dart';
 import 'package:curriculum_front/src/modules/home/model/competencia.dart';
 
 class RegisterCandidatoDTO {
