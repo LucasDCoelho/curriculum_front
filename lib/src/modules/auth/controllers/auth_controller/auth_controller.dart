@@ -11,7 +11,8 @@ part 'auth_controller.g.dart';
 class AuthController = _AuthController with _$AuthController;
 
 abstract class _AuthController with Store {
-  final _baseUrl = "https://api-curriculum.onrender.com";
+  final _baseUrl = "http://192.168.100.21:8080";
+  // final _baseUrl = "https://api-curriculum.onrender.com";
   final _dioService = Modular.get<DioService>();
 
   final TokenController tokenController;

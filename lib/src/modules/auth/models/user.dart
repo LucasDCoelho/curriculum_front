@@ -27,7 +27,6 @@ class User {
       id: id ?? this.id,
       login: login ?? this.login,
       password: password ?? this.password,
-      candidatos: candidatos ?? this.candidatos,
     );
   }
 
@@ -36,7 +35,6 @@ class User {
       'id': id,
       'login': login,
       'password': password,
-      'candidatos': candidatos?.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -45,7 +43,6 @@ class User {
       id: map['id'] != null ? map['id'] as int : null,
       login: map['login'] as String,
       password: map['password'] as String,
-      candidatos: map['candidatos'] != null ? Set<Candidato>.from((map['candidatos'] as List<int>).map<Candidato?>((x) => Candidato.fromMap(x as Map<String,dynamic>),),) : null,
     );
   }
 

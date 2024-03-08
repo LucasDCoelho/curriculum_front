@@ -69,6 +69,12 @@ abstract class _CandidatoFormController with Store {
   @observable
   ObservableList<Competencia> competencias = ObservableList<Competencia>();
 
+  @observable
+  String descricao = "";
+
+  @action
+  void setDescricao(String value) => descricao = value;
+
   @action
   void addCompetencia(Competencia competencia) => competencias.add(competencia);
 
@@ -123,7 +129,9 @@ abstract class _CandidatoFormController with Store {
   //  Enviar fomulario do candidato:
 
   Future enviarCandidato() async {
-    
+    List<Competencia> listaCompetencias = competencias.map((competenciaMap) {
+      return Competencia.fromJson(competenciaMap.toJson());
+    }).toList();
 
     print("Teste");
     final candidato = RegisterCandidatoDTO(
@@ -134,10 +142,10 @@ abstract class _CandidatoFormController with Store {
       telefone: telefone,
       escolaridade: escolaridade,
       funcao: funcao,
-      competencias: competencias.toList(),
+      competencias: listaCompetencias,
     );
 
-    const urlBase = 'https://api-curriculum.onrender.com/candidato/create';
+    const urlBase = 'http://192.168.100.21:8080/candidato/create';
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${await token.getToken()}'

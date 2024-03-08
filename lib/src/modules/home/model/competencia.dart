@@ -5,7 +5,11 @@ class Competencia {
   String descricao;
   Proficiencia proficiencia;
 
-  Competencia({ required this.descricao, required this.proficiencia, this.id});
+  Competencia({
+    this.id,
+    required this.descricao,
+    required this.proficiencia,
+  });
 
   factory Competencia.fromJson(Map<String, dynamic> json) {
     return Competencia(

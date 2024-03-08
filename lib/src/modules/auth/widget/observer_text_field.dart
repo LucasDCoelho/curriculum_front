@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class ObserverTextField extends StatefulWidget {
@@ -8,6 +9,7 @@ class ObserverTextField extends StatefulWidget {
   final bool obscureText;
   final String? errorText;
   final bool enabled;
+  final List<TextInputFormatter>? mask;
 
   const ObserverTextField({
     required this.labelText,
@@ -16,6 +18,7 @@ class ObserverTextField extends StatefulWidget {
     required this.obscureText,
     this.enabled = true,
     this.errorText,
+    this.mask,
     super.key
       });
 
@@ -30,6 +33,7 @@ class _ObserverTextFieldState extends State<ObserverTextField> {
       builder: (_) => TextField(
           onChanged: widget.onChanged,
           obscureText: widget.obscureText,
+          inputFormatters: widget.mask,
           decoration: InputDecoration(
             enabled: widget.enabled,
             border: const OutlineInputBorder(),

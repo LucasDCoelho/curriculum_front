@@ -3,26 +3,31 @@ import 'package:curriculum_front/src/modules/home/enums/escolaridade.dart';
 import 'package:curriculum_front/src/modules/home/model/candidato.dart';
 import 'package:curriculum_front/src/modules/home/model/competencia.dart';
 
-class RegisterCandidatoDTO extends Candidato {
+import 'dart:convert';
+
+import 'package:curriculum_front/src/modules/home/enums/escolaridade.dart';
+import 'package:curriculum_front/src/modules/home/model/competencia.dart';
+
+class RegisterCandidatoDTO {
+  final String nome;
+  final String cpf;
+  final DateTime dataDeNascimento;
+  final String email;
+  final String telefone;
+  final Escolaridade escolaridade;
+  final String funcao;
+  final List<Competencia> competencias;
+
   RegisterCandidatoDTO({
-    required String nome,
-    required String cpf,
-    required DateTime dataDeNascimento,
-    required String email,
-    required String telefone,
-    required Escolaridade escolaridade,
-    required String funcao,
-    required List<Competencia> competencias,
-  }) : super(
-          nome: nome,
-          cpf: cpf,
-          dataDeNascimento: dataDeNascimento,
-          email: email,
-          telefone: telefone,
-          escolaridade: escolaridade,
-          funcao: funcao,
-          competencias: competencias,
-        );
+    required this.nome,
+    required this.cpf,
+    required this.dataDeNascimento,
+    required this.email,
+    required this.telefone,
+    required this.escolaridade,
+    required this.funcao,
+    required this.competencias,
+  });
 
   factory RegisterCandidatoDTO.fromJson(String source) {
     final Map<String, dynamic> map = json.decode(source);
@@ -34,12 +39,23 @@ class RegisterCandidatoDTO extends Candidato {
       telefone: map['telefone'],
       escolaridade: EscolaridadeExtension.fromValue(map['escolaridade']),
       funcao: map['funcao'],
-      competencias: (map['competencias'] as List).map((competencia) => Competencia.fromJson(competencia)).toList(),
+      competencias: (map['competencias'] as List)
+          .map((competencia) => Competencia.fromJson(competencia))
+          .toList(),
     );
   }
 
-  @override
   String toJson() {
-    return json.encode(super.toMap());
+    return json.encode({
+      'nome': nome,
+      'cpf': cpf,
+      'dataDeNascimento': dataDeNascimento.toIso8601String(),
+      'email': email,
+      'telefone': telefone,
+      'escolaridade': escolaridade.toValue(),
+      'funcao': funcao,
+      'competencias': competencias.map((competencia) => competencia.toJson()).toList(),
+    });
   }
 }
+

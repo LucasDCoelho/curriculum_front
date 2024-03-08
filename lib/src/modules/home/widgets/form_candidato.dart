@@ -2,6 +2,7 @@ import 'package:curriculum_front/src/modules/auth/widget/observer_button.dart';
 import 'package:curriculum_front/src/modules/auth/widget/observer_text_field.dart';
 import 'package:curriculum_front/src/modules/home/controllers/candidato_form_controller/candidato_form_controller.dart';
 import 'package:curriculum_front/src/modules/home/enums/escolaridade.dart';
+import 'package:curriculum_front/src/modules/home/utils/adm_content/formatter_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -12,6 +13,8 @@ class FormCandidato extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formCandidatoController = Modular.get<CandidatoFormController>();
+
+    
 
     return ListView(
       children: [
@@ -26,7 +29,8 @@ class FormCandidato extends StatelessWidget {
                     labelText: "Nome",
                     hintText: "Digite seu nome!",
                     onChanged: formCandidatoController.setNome,
-                    obscureText: false),
+                    obscureText: false,
+                  ),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 18.0),
@@ -34,7 +38,9 @@ class FormCandidato extends StatelessWidget {
                     labelText: "CPF",
                     hintText: "Digite seu cpf!",
                     onChanged: formCandidatoController.setCpf,
-                    obscureText: false),
+                    obscureText: false,
+                    mask: [cpfMaskFormatter],
+                  ),
               ),
               Observer(
                 builder: (_) => Text(
@@ -45,7 +51,6 @@ class FormCandidato extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 18.0),
                   child: ElevatedButton(
                       onPressed: () async {
-                        
                         return await formCandidatoController
                             .selectDate(context);
                       },
@@ -72,7 +77,9 @@ class FormCandidato extends StatelessWidget {
                     labelText: "Telefone",
                     hintText: "Digite seu telefone!",
                     onChanged: formCandidatoController.setTelefone,
-                    obscureText: false),
+                    obscureText: false,
+                    mask: [numberMaskFormatter],
+                  ),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 18.0),
