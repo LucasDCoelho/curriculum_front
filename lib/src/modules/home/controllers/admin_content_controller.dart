@@ -13,8 +13,8 @@ class AdminContentController = _AdminContentController
     with _$AdminContentController;
 
 abstract class _AdminContentController with Store {
-  final _baseUrl = "http://192.168.100.21:8080";
-  // final _baseUrl = "https://api-curriculum.onrender.com";
+  // final _baseUrl = "http://192.168.100.21:8080";
+  final _baseUrl = "https://api-curriculum.onrender.com";
   final _dioService = Modular.get<DioService>();
   final _token = Modular.get<TokenController>();
 

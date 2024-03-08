@@ -145,7 +145,7 @@ abstract class _CandidatoFormController with Store {
       competencias: listaCompetencias,
     );
 
-    const urlBase = 'http://192.168.100.21:8080/candidato/create';
+    const urlBase = 'https://api-curriculum.onrender.com/candidato/create';
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${await token.getToken()}'
